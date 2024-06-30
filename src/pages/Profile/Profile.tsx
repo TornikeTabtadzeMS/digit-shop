@@ -4,10 +4,22 @@ import userServices from "../../services/User";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import OrderTable from "./OrderTable";
+import { useEffect, useState } from "react";
+import IOrder from "../../interfaces/orderInterface";
+import orderServices from "../../services/Order";
 
 export default function Profile() {
   const { user, setUser, clearTokens } = authStore();
   const navigate = useNavigate();
+  const [orders, setOrders] = useState<IOrder[]>([]);
+
+  useEffect(() => {
+    orderServices.getAllHistory().then((res) => {
+      console.log(res.data);
+      setOrders(res.data);
+    });
+  }, []);
 
   const handleDeleteUser = (id: string) => {
     userServices
@@ -25,8 +37,8 @@ export default function Profile() {
       });
   };
   return (
-    <div className="min-h-screen w-full bg-secondary flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <div className="min-h-screen w-full bg-secondary flex flex-col md:flex-row">
+      <div className="bg-success h-screen p-6 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex items-center justify-center mb-4">
           <Avatar />
         </div>
@@ -54,6 +66,7 @@ export default function Profile() {
           </button>
         </div>
       </div>
+      <OrderTable orders={orders} />
     </div>
   );
 }

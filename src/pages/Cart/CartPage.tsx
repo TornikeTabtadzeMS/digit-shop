@@ -2,9 +2,15 @@ import { Button, Grid } from "@mui/material";
 import CartSummary from "./CartSummary";
 import { Link } from "react-router-dom";
 import CartTable from "./CartTable";
-import { toast } from "react-toastify";
+import { useState } from "react";
+import CheckoutModal from "./CheckoutModal";
+import cartStore from "../../stores/CartStore";
 
 export default function CartPage() {
+  const { cart } = cartStore();
+  const [checkoutModalIsOpen, setCheckoutModalIsOpen] =
+    useState<boolean>(false);
+
   return (
     <div className="w-full bg-secondary p-6">
       <CartTable />
@@ -19,12 +25,19 @@ export default function CartPage() {
             variant="contained"
             size="large"
             fullWidth
+            disabled={!cart?.length}
             onClick={() => {
-              toast.warning("Tornike finish the check out form");
+              setCheckoutModalIsOpen(true);
             }}
           >
             Checkout
           </Button>
+          <CheckoutModal
+            isOpen={checkoutModalIsOpen}
+            onClose={() => {
+              setCheckoutModalIsOpen(false);
+            }}
+          />
         </Grid>
       </Grid>
     </div>

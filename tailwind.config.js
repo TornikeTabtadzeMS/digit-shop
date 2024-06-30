@@ -10,7 +10,8 @@ export default {
         'light-error': '#E57373',
         'secondary': '#ac8866',
         'success': '#697561',
-        'custom-green': '#10b981',
+        'info': '#3056CF',
+        'custom-green': '#00425B',
         'custom-red': '#ef4444',
       },
       backgroundImage: {
