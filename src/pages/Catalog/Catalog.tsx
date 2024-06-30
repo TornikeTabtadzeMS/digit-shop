@@ -12,7 +12,7 @@ export default function Catalog() {
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const { products, setProducts } = productStore();
-  const pageSize = 3;
+  const pageSize = 10;
 
   useEffect(() => {
     productService.getAll({ pageSize: pageSize }).then((res) => {
