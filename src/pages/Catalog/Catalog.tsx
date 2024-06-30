@@ -1,26 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import productService from "../../services/Product";
 import Sidebar from "../../layout/SideBar";
 import productStore from "../../stores/ProductStore";
 import ProductCard from "./ProductCard";
-import authStore from "../../stores/AuthStore";
 import Login from "../Auth/Login/Login";
 import loginStore from "../../stores/LoginStore";
+import { Pagination } from "@mui/material";
 
 export default function Catalog() {
   const { isOpen, setIsOpen } = loginStore();
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const { products, setProducts } = productStore();
-  authStore();
+  const pageSize = 4;
 
   useEffect(() => {
-    productService.getAll().then((res) => {
+    productService.getAll({ pageSize: pageSize }).then((res) => {
       setProducts(res.data.products);
+      setTotal(Math.ceil(res.data.total / pageSize));
     });
   }, [setProducts]);
 
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    event.preventDefault();
+    setPage(value);
+    productService
+      .getAll({ pageSize: pageSize, page: value.toString() })
+      .then((res) => {
+        setProducts(res.data.products);
+      })
+      .catch((error) => {
+        console.log(error.messages);
+      });
+  };
+
   if (products == null) return <h1>no products</h1>;
   return (
-    <div className={`flex w-full flex-col md:flex-row`}>
+    <div className={`flex w-full flex-col bg-success md:flex-row`}>
       <Sidebar />
       <div
         className={`${
@@ -49,13 +65,23 @@ export default function Catalog() {
         <Login />
       </div>
       <div
-        className={`md:w-9/12 w-screen item-center justify-around flex flex-wrap ${
+        className={`md:w-9/12 w-screen item-center ${
           isOpen && "pointer-events-none"
         }`}
       >
-        {products.map((p) => (
-          <ProductCard key={p.id} product={p} />
-        ))}
+        <div className={`w-full item-center justify-around flex flex-wrap`}>
+          {products.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+        <Pagination
+          page={page}
+          onChange={handleChange}
+          hideNextButton
+          hidePrevButton
+          count={total}
+          sx={{ padding: 2 }}
+        />
       </div>
     </div>
   );
