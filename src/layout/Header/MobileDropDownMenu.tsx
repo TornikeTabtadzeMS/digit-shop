@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authStore from "../../stores/AuthStore";
-import { IUser } from "../../interfaces/userInterfaces";
+import { IUser, Roles } from "../../interfaces/userInterfaces";
+import {
+  ShoppingCart,
+  FavoriteBorder,
+  PermIdentity,
+} from "@mui/icons-material";
+import admin from "../../assets/images/admin.png";
 
 export default function MobileDropDownMenu() {
   const [customer, setCustomer] = useState<null | IUser>(null);
@@ -21,8 +27,35 @@ export default function MobileDropDownMenu() {
     <nav className="md:hidden">
       {customer && (
         <>
-          <Link to="/" className="block text-white py-2 px-4 hover:bg-blue-500">
-            Profile
+          <Link
+            to="/profile"
+            className="flex justify-between text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+            role="menuitem"
+          >
+            Profile <PermIdentity />
+          </Link>
+          {user?.role === Roles.ADMIN && (
+            <Link
+              to="/admin"
+              className="flex justify-between text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+              role="menuitem"
+            >
+              Admin <img width={20} height={5} src={admin} alt="admin" />
+            </Link>
+          )}
+          <Link
+            to="/cart"
+            className="flex justify-between text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+            role="menuitem"
+          >
+            Cart <ShoppingCart />
+          </Link>
+          <Link
+            to="/liked"
+            className="flex justify-between text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+            role="menuitem"
+          >
+            WishList <FavoriteBorder />
           </Link>
         </>
       )}

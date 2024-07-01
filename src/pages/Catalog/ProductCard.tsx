@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import cartService from "../../services/Cart";
 import likedProductServices from "../../services/LikedProducts";
 import productStore from "../../stores/ProductStore";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface IProp {
   product: IProduct;
@@ -18,21 +18,10 @@ interface IProp {
 export default function ProductCard({ product }: IProp) {
   const { setIsOpen } = loginStore();
   const { user } = authStore();
-  const { favorites, setFavorites } = productStore();
+  const { favorites } = productStore();
   const [favoriteItems, setFavoriteItems] =
     useState<IRootLikedProduct[]>(favorites);
-  const isFavorite = favorites.some((f) => f.product_id == product.id);
-
-  useEffect(() => {
-    likedProductServices
-      .getAll()
-      .then((res) => {
-        setFavorites(res.data);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }, [setFavorites, favoriteItems]);
+  const isFavorite = favoriteItems.some((f) => f.product_id == product.id);
 
   const handleAddToCart = () => {
     if (user) {
@@ -58,6 +47,7 @@ export default function ProductCard({ product }: IProp) {
           console.log(res.data);
           setFavoriteItems(favorites);
           toast.success(`the product: ${product.title} has added to wishlist`);
+          location.reload();
         })
         .catch((error) => {
           console.log(error.message);

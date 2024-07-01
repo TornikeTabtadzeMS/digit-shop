@@ -12,16 +12,6 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, setUser } = authStore();
   const { setFavorites } = productStore();
-  useEffect(() => {
-    likedProductServices
-      .getAll()
-      .then((res) => {
-        setFavorites(res.data);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }, [setFavorites]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -35,8 +25,16 @@ const Header = () => {
           console.log(error.message);
           console.log(token);
         });
+      likedProductServices
+        .getAll()
+        .then((res) => {
+          setFavorites(res.data);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     }
-  }, [setUser]);
+  }, [setFavorites, setUser]);
 
   return (
     <header className="bg-primary max-w-full px-6">
