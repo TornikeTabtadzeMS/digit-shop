@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import categoryService from "../services/Category";
 import { toast } from "react-toastify";
 import { IProductCategory } from "../interfaces/categoryInterfaces";
@@ -21,16 +21,17 @@ const Sidebar = () => {
       .catch((error) => {
         toast.error(error.message);
       });
-
-    productService
-      .getAll({ categoryName: activeCategories, productName: query })
-      .then((res) => {
-        setProducts(res.data.products);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }, [activeCategories, query, setProducts]);
+    if (query != "" || categories.length > 0) {
+      productService
+        .getAll({ categoryName: activeCategories, productName: query })
+        .then((res) => {
+          setProducts(res.data.products);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+  }, [activeCategories, categories.length, query, setProducts]);
 
   const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -40,11 +41,6 @@ const Sidebar = () => {
         ? [...activeCategories, name]
         : activeCategories.filter((category) => category !== name)
     );
-  };
-
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(query);
   };
 
   const toggleSidebar = () => {
@@ -105,7 +101,7 @@ const Sidebar = () => {
         {/* Search Form */}
         <div className="flex items-center justify-center h-20 shadow-md">
           <div className="flex items-center justify-center p-4 w-full max-w-md">
-            <form onSubmit={handleSearch} className="w-full">
+            <form className="w-full">
               <div className="relative">
                 <input
                   type="text"

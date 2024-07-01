@@ -3,8 +3,6 @@ import Root from "./Root";
 import PrivateRouter from "./PrivateRouter";
 import Catalog from "../pages/Catalog/Catalog";
 import Error from "../pages/Error/Error";
-import AddminRoute from "./AdminRoute";
-import Admin from "../pages/Admin/Admin";
 import Auth from "../pages/Auth/Auth";
 import Register from "../pages/Auth/Register/Register";
 import Login from "../pages/Auth/Login/Login";
@@ -16,6 +14,9 @@ import Profile from "../pages/Profile/Profile";
 import CartPage from "../pages/Cart/CartPage";
 import Edit from "../pages/Profile/Edit";
 import Favorites from "../pages/Catalog/WishList/Favorites";
+import AdminRoute from "./AdminRoute";
+import CategoryTable from "../pages/Admin/Categories/CategoryTable";
+import ProductTable from "../pages/Admin/Products/ProductsTable";
 
 const Router = createBrowserRouter([
   {
@@ -33,7 +34,6 @@ const Router = createBrowserRouter([
         path: "/shop/:id",
         element: <ProductDetails />,
       },
-
       {
         element: <PrivateRouter />,
         children: [
@@ -54,8 +54,11 @@ const Router = createBrowserRouter([
             element: <CartPage />,
           },
           {
-            element: <AddminRoute />,
-            children: [{ path: "/admin", element: <Admin /> }],
+            element: <AdminRoute />,
+            children: [
+              { path: "/admin", element: <CategoryTable /> },
+              { path: "/products", element: <ProductTable /> },
+            ],
           },
         ],
       },

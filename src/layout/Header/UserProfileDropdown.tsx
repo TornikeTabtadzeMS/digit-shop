@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import authStore from "../../stores/AuthStore";
 import { Link, useNavigate } from "react-router-dom";
-import { IUser } from "../../interfaces/userInterfaces";
+import { IUser, Roles } from "../../interfaces/userInterfaces";
+import admin from "../../assets/images/admin.png";
 import {
   FavoriteBorder,
   Logout,
@@ -69,6 +70,15 @@ const UserProfileDropdown = () => {
             >
               Profile <PermIdentity />
             </Link>
+            {user?.role === Roles.ADMIN && (
+              <Link
+                to="/admin"
+                className="flex justify-between text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                role="menuitem"
+              >
+                Admin <img width={20} height={5} src={admin} alt="admin" />
+              </Link>
+            )}
             <Link
               to="/cart"
               className="flex justify-between text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
