@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { CowboyHatIcon } from "hugeicons-react";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import authServices from "../../../services/Auth";
 import { toast } from "react-toastify";
 import authStore from "../../../stores/AuthStore";
@@ -19,6 +19,7 @@ import { IUser } from "../../../interfaces/userInterfaces";
 
 export default function Login() {
   const navigate = useNavigate();
+  const loc = useLocation();
   const { setTokens, setUser } = authStore();
   const {
     register,
@@ -40,7 +41,8 @@ export default function Login() {
         //decode accesstoken to user
         const decodedUser = jwtDecode(res.data.access_token) as IUser;
         setUser(decodedUser);
-        navigate("/");
+        if (loc.pathname.includes("/auth")) navigate("/");
+        else location.reload();
         toast.success(`hello ${decodedUser.first_name}`);
       })
       .catch((error) => {

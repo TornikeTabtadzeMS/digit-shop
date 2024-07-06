@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import authStore from "../../stores/AuthStore";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IUser, Roles } from "../../interfaces/userInterfaces";
 import admin from "../../assets/images/admin.png";
 import {
@@ -14,7 +14,6 @@ const UserProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [customer, setCustomer] = useState<null | IUser>(null);
   const { user, clearTokens, setUser } = authStore();
-  const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -27,7 +26,7 @@ const UserProfileDropdown = () => {
   const handleLogout = () => {
     clearTokens();
     setUser(null);
-    navigate("/");
+    location.reload();
   };
 
   return (
